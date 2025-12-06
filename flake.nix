@@ -14,24 +14,19 @@
     };
 
     # noctalia shiz
-    # noctalia = {
-    #   url = "github:noctalia-dev/noctalia-shell";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-
-    # quickshell for noctalia
-    # quickshell = {
-    #   url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{nixpkgs,home-manager,...}:{
+  outputs = inputs@{self, nixpkgs,home-manager,...}:{
     nixosConfigurations = {
       nixos = nixpkgs.lib.nixosSystem{
         specialArgs = { inherit inputs; }; #used to pass hyprland vars in configuration.nix
         modules = [
           ./configuration.nix
+          ./noctalia.nix
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;

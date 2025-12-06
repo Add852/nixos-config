@@ -1,5 +1,4 @@
 { inputs, config, pkgs, ... }:
-
 {
   imports = [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -48,29 +47,26 @@
     packages = with pkgs; [];
   };
 
-  #services.displayManager.sddm.wayland.enable = true;
-  #services.displayManager.sddm.enable = true; #Log In Manager
-  services.greetd = { #someone's log in manager online I saw lol (replaced)
+  # SDDM LOG IN
+  # services.displayManager.sddm.wayland.enable = true;
+  # services.displayManager.sddm.enable = true; #Log In Manager
+  # services.displayManager.autoLogin.enable = true; # Enable automatic login for the user.
+  # services.displayManager.autoLogin.user = "tony";
+  # services.desktopManager.plasma6.enable = false; #Enable the KDE Plasma Desktop Environment.
+  services.greetd = { #someone's log in manager online I saw lol (replaced sddm)
     enable = true;
-    settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --xsessions ${config.services.displayManager.sessionData.desktops}/share/xsessions --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions --remember --remember-user-session --user-menu --user-menu-min-uid 1000 --asterisks --power-shutdown 'shutdown -P now' --power-reboot 'shutdown -r now'";
-  };  
-  services.displayManager.autoLogin.enable = false; # Enable automatic login for the user.
-  services.displayManager.autoLogin.user = "tony";
+    settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --greeting 'Welcome to NixOS!' --xsessions ${config.services.displayManager.sessionData.desktops}/share/xsessions --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions --remember --remember-user-session --user-menu --user-menu-min-uid 1000 --asterisks --power-shutdown 'shutdown -P now' --power-reboot 'shutdown -r now'";
+  };
   programs.hyprland = { # Enable hyperland Desktop Environment
     enable = true;
     withUWSM = true; # recommended for most users
-    # xwayland.enable = true; # Xwayland can be disabled.
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;     # set the flake package
     portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;     # make sure to also set the portal package, so that they are in sync
   };
-  # services.desktopManager.plasma6.enable = false; #Enable the KDE Plasma Desktop Environment.
 
-  # security.polkit.enable = true; #to allow kate to ask permission
-  # environment.variables.EDITOR = "kate"; # set kate as default text editor
   # List packages installed in system profile. To search, run:
   nixpkgs.config.allowUnfree = true; # Allow unfree packages (cursor and other proprietary drivers)
   environment.systemPackages = with pkgs; [
-    kdePackages.kate
     git
     wget
   ];
@@ -80,9 +76,11 @@
     package = pkgs.firefox;
     nativeMessagingHosts.packages = [ pkgs.firefoxpwa ]; # firefox pwa install
   };
+  
+  environment.variables.EDITOR = "code"; # set vscode as default text editor
   programs.vscode = {
     enable = true;
-    # package = pkgs.vscode.fhs; # Use the FHS-compliant VS Code package
+    package = pkgs.vscode.fhs; # Use the FHS-compliant VS Code package
     extensions = with pkgs.vscode-extensions; [ # Add desired extensions here
       bbenoist.nix # Example: Nix language support
       dbaeumer.vscode-eslint # Example: ESLint extension
@@ -100,7 +98,6 @@
 
   # HARDWARE and I/O STUFFS
   hardware.bluetooth.enable = true; #ForBluetooth
-  # services.printing.enable = true;   # Enable CUPS to print documents.
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -111,6 +108,7 @@
     pulse.enable = true;
     # media-session.enable = true; # use the example session manager (no others are packaged yet so this is enabled by default, no need to redefine it in your config for now)
   };
+  # services.printing.enable = true;   # Enable CUPS to print documents.
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 

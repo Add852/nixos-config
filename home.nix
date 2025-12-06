@@ -38,8 +38,7 @@
 
     #some hyprland stuffs
     waybar # TODO: delete if not needed or configure
-    ashell
-    fuzzel #application menu
+    walker #application menu
     hyprcursor #hyprland themed cursor idk
     hyprshot #screenshot for hyperland
     hyprpolkitagent #hyprland authentication handler shii (asks root perm for apps with GUI like VS Code)
@@ -78,8 +77,8 @@
     # ipcalc  # it is a calculator for the IPv4/v6 addresses
 
     # misc
-    cowsay
-    tree
+    # cowsay
+    # tree
     # file
     # which
     # gnused
@@ -91,7 +90,7 @@
     # nix related
     # it provides the command `nom` works just like `nix`
     # with more details log output
-    nix-output-monitor
+    # nix-output-monitor
 
     # productivity
     # hugo # static site generator
