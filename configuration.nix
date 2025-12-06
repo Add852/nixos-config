@@ -1,6 +1,7 @@
 { inputs, config, pkgs, ... }:
 {
   imports = [ # Include the results of the hardware scan.
+    inputs.walker.nixosModules.default
     ./hardware-configuration.nix
   ];
 
@@ -71,6 +72,8 @@
     wget
   ];
 
+  programs.walker.enable = true;
+
   programs.firefox = {   # firefox w/ pwa pluhh
     enable = true;
     package = pkgs.firefox;
@@ -80,7 +83,7 @@
   environment.variables.EDITOR = "code"; # set vscode as default text editor
   programs.vscode = {
     enable = true;
-    package = pkgs.vscode.fhs; # Use the FHS-compliant VS Code package
+    # package = pkgs.vscode.fhs; # Use the FHS-compliant VS Code package
     extensions = with pkgs.vscode-extensions; [ # Add desired extensions here
       bbenoist.nix # Example: Nix language support
       dbaeumer.vscode-eslint # Example: ESLint extension

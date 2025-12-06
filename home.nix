@@ -4,6 +4,7 @@
   home.username = "tony";
   home.homeDirectory = "/home/tony";
 
+
   # link the configuration file in current directory to the specified location in home directory
   # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
 
@@ -38,7 +39,6 @@
 
     #some hyprland stuffs
     waybar # TODO: delete if not needed or configure
-    walker #application menu
     hyprcursor #hyprland themed cursor idk
     hyprshot #screenshot for hyperland
     hyprpolkitagent #hyprland authentication handler shii (asks root perm for apps with GUI like VS Code)

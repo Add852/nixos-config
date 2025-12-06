@@ -7,6 +7,13 @@
     # hyprland shiz
     hyprland.url = "github:hyprwm/Hyprland";
 
+    # walker and elephant
+    elephant.url = "github:abenz1267/elephant";
+    walker = {
+      url = "github:abenz1267/walker";
+      inputs.elephant.follows = "elephant";
+    };
+
     # home-manager, used for managing user configuration
     home-manager = {
       url = "github:nix-community/home-manager";
