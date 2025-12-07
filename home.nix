@@ -34,18 +34,17 @@
     neofetch
     obsidian
     firefoxpwa
-    syncthingtray
     code-cursor
 
     #some hyprland stuffs
-    waybar # TODO: delete if not needed or configure
+    rofi # rofi app launcher (more stable than walker)
     hyprcursor #hyprland themed cursor idk
     hyprshot #screenshot for hyperland
     hyprpolkitagent #hyprland authentication handler shii (asks root perm for apps with GUI like VS Code)
     xdg-desktop-portal-hyprland #some basic desktop utils like screen sharing and screenshot
 
     #noctalia-shell stuffs
-    quickshell #core component for noctalia
+    # quickshell #core component for noctalia
     gpu-screen-recorder #for noctalia screen recorder
     brightnessctl #for noctalia brightness I think
     cliphist #clipboard history (optional)
@@ -154,10 +153,11 @@
   programs.alacritty = {
     enable = true;
     settings = {
+      general.import = [ "themes/noctalia.toml" ];
       env.TERM = "xterm-256color";
       font = {
         size = 12;
-        draw_bold_text_with_bright_colors = true;
+        # draw_bold_text_with_bright_colors = true;
       };
       scrolling.multiplier = 5;
       selection.save_to_clipboard = true;

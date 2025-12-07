@@ -7,13 +7,6 @@
     # hyprland shiz
     hyprland.url = "github:hyprwm/Hyprland";
 
-    # walker and elephant
-    elephant.url = "github:abenz1267/elephant";
-    walker = {
-      url = "github:abenz1267/walker";
-      inputs.elephant.follows = "elephant";
-    };
-
     # home-manager, used for managing user configuration
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -33,6 +26,7 @@
         specialArgs = { inherit inputs; }; #used to pass hyprland vars in configuration.nix
         modules = [
           ./configuration.nix
+          ./users.nix
           ./noctalia.nix
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;

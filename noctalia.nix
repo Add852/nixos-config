@@ -7,7 +7,7 @@
     ];
 
     # enable the systemd service (for tracking gui changes)
-    programs.noctalia-shell.systemd.enable = true;
+    # programs.noctalia-shell.systemd.enable = true;
     
     # configure options
     programs.noctalia-shell = {

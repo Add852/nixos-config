@@ -1,7 +1,8 @@
 { inputs, config, pkgs, ... }:
+
 {
   imports = [ # Include the results of the hardware scan.
-    inputs.walker.nixosModules.default
+    # inputs.noctalia.homeModules.default
     ./hardware-configuration.nix
   ];
 
@@ -30,54 +31,28 @@
     LC_TIME = "fil_PH";
   };
 
-  # X11 stuffs dafuq even is X11
-  # Configure keymap in X11
-  # services.xserver.xkb = {
-  #  layout = "us";
-  #  variant = "";
-  # };
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
-  # services.xserver.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.tony = {
-    isNormalUser = true;
-    description = "Anthony";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [];
-  };
-
-  # SDDM LOG IN
-  # services.displayManager.sddm.wayland.enable = true;
-  # services.displayManager.sddm.enable = true; #Log In Manager
-  # services.displayManager.autoLogin.enable = true; # Enable automatic login for the user.
-  # services.displayManager.autoLogin.user = "tony";
-  # services.desktopManager.plasma6.enable = false; #Enable the KDE Plasma Desktop Environment.
-  services.greetd = { #someone's log in manager online I saw lol (replaced sddm)
-    enable = true;
-    settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --greeting 'Welcome to NixOS!' --xsessions ${config.services.displayManager.sessionData.desktops}/share/xsessions --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions --remember --remember-user-session --user-menu --user-menu-min-uid 1000 --asterisks --power-shutdown 'shutdown -P now' --power-reboot 'shutdown -r now'";
-  };
   programs.hyprland = { # Enable hyperland Desktop Environment
     enable = true;
     withUWSM = true; # recommended for most users
-    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;     # set the flake package
-    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;     # make sure to also set the portal package, so that they are in sync
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland; # set the flake package
+    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland; # make sure to also set the portal package, so that they are in sync
   };
 
   # List packages installed in system profile. To search, run:
   nixpkgs.config.allowUnfree = true; # Allow unfree packages (cursor and other proprietary drivers)
   environment.systemPackages = with pkgs; [
-    git
-    wget
+    kdePackages.qtmultimedia #just to get sddm theme working :/
   ];
-
-  programs.walker.enable = true;
 
   programs.firefox = {   # firefox w/ pwa pluhh
     enable = true;
     package = pkgs.firefox;
     nativeMessagingHosts.packages = [ pkgs.firefoxpwa ]; # firefox pwa install
+  };
+
+  services.syncthing = {
+    enable = true;
+    openDefaultPorts = true; # Open ports in the firewall for Syncthing. (NOTE: this will not open syncthing gui port)
   };
   
   environment.variables.EDITOR = "code"; # set vscode as default text editor
@@ -95,12 +70,14 @@
   environment.sessionVariables.NIXOS_OZONE_WL = "1";   #to use VSCODE on wayland
   networking.firewall = {   # Open ports in the firewall.
     enable = true;
-    allowedTCPPorts = [ 8080 ];
+    allowedTCPPorts = [ 8080 8384 ]; #web_localhost, syncthing port
     # allowedUDPPorts = [ ... ];
   };
 
   # HARDWARE and I/O STUFFS
   hardware.bluetooth.enable = true; #ForBluetooth
+  services.upower.enable = true; #ForNoctalia Battery Status
+  services.power-profiles-daemon.enable = true; #ForNoctalia Battery Profiles
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -133,7 +110,25 @@
     KERNEL=="event0", ATTRS{name}=="AT Translated Set 2 keyboard", ENV{LIBINPUT_IGNORE_DEVICE}="1"
   '';
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];   # Enable flakes w/ home manager
+  # Enable Flake, Automate Maintenance (GC and Updates)
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];   # Enable flakes w/ home manager
+    auto-optimise-store = true;
+  };
+  nix.optimise.automatic = true;
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
+  system.autoUpgrade = {
+    enable = true;
+    operation = "switch"; # If you don't want to apply updates immediately, only after rebooting, use `boot` option in this case
+    flake = "/etc/nixos";
+    flags = [ "--update-input" "nixpkgs" "--update-input" "--commit-lock-file" ];
+    dates = "weekly";
+  };
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
