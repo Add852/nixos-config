@@ -10,16 +10,7 @@
     # GREETD LOG IN
     services.greetd = { #someone's log in manager online I saw lol (replaced sddm)
         enable = true;
-        settings = { # 'rec' is important here to allow recursive reference
-            initial_session = {
-                command = "${pkgs.hyprland}/bin/Hyprland & --cmd noctalia-shell";
-                user = "tony";
-            };
-            default_session = {
-                command = "${pkgs.tuigreet}/bin/tuigreet --greeting 'Welcome to NixOS!' --time --remember --remember-user-session --user-menu --user-menu-min-uid 1000 --asterisks --power-shutdown 'shutdown -P now' --power-reboot 'shutdown -r now' --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions";
-                user = "greeter";
-            };
-        };
+        settings.default_session.command = "${pkgs.tuigreet}/bin/tuigreet --greeting 'Welcome to NixOS!' --xsessions ${config.services.displayManager.sessionData.desktops}/share/xsessions --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions --remember --remember-user-session --user-menu --user-menu-min-uid 1000 --asterisks --power-shutdown 'shutdown -P now' --power-reboot 'shutdown -r now'";
     };
 
     # SDDM LOG IN

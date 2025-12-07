@@ -2,7 +2,6 @@
 
 {
   imports = [ # Include the results of the hardware scan.
-    # inputs.noctalia.homeModules.default
     ./hardware-configuration.nix
   ];
 
@@ -41,14 +40,20 @@
   # List packages installed in system profile. To search, run:
   nixpkgs.config.allowUnfree = true; # Allow unfree packages (cursor and other proprietary drivers)
   environment.systemPackages = with pkgs; [
-    kdePackages.qtsvg #for dolphin icons
-    kdePackages.kio # needed since 25.11 (dolphin dependencies)
-    kdePackages.kio-fuse #to mount remote filesystems via FUSE (dolphin dependencies)
-    kdePackages.kio-extras #extra protocols support (sftp, fish and more) (dolphin dependencies)
-    kdePackages.dolphin # This is the actual dolphin package
+    ffmpegthumbnailer #video thumbnail preview for thunar
     kdePackages.qtmultimedia #just to get SDDM theme working :/
   ];
 
+  services.tumbler.enable = true; #enable image preview for thunar (unsure if needed)
+  services.gvfs.enable = true; #Enable gvfs for trash, mounting, and other functionalities
+  programs.thunar = { 
+    enable = true;
+    plugins = with pkgs.xfce; [
+      thunar-archive-plugin
+      thunar-volman
+    ];
+  };
+  
   programs.firefox = { # firefox w/ pwa pluhh
     enable = true;
     package = pkgs.firefox;
@@ -58,7 +63,6 @@
     enable = true;
     openDefaultPorts = true; # Open ports in the firewall for Syncthing. (NOTE: this will not open syncthing gui port)
   };
-  
   environment.variables.EDITOR = "code"; # set vscode as default text editor
   programs.vscode = {
     enable = true;
