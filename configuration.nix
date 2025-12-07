@@ -41,16 +41,20 @@
   # List packages installed in system profile. To search, run:
   nixpkgs.config.allowUnfree = true; # Allow unfree packages (cursor and other proprietary drivers)
   environment.systemPackages = with pkgs; [
-    kdePackages.qtmultimedia #just to get sddm theme working :/
+    kdePackages.qtsvg #for dolphin icons
+    kdePackages.kio # needed since 25.11 (dolphin dependencies)
+    kdePackages.kio-fuse #to mount remote filesystems via FUSE (dolphin dependencies)
+    kdePackages.kio-extras #extra protocols support (sftp, fish and more) (dolphin dependencies)
+    kdePackages.dolphin # This is the actual dolphin package
+    kdePackages.qtmultimedia #just to get SDDM theme working :/
   ];
 
-  programs.firefox = {   # firefox w/ pwa pluhh
+  programs.firefox = { # firefox w/ pwa pluhh
     enable = true;
     package = pkgs.firefox;
     nativeMessagingHosts.packages = [ pkgs.firefoxpwa ]; # firefox pwa install
   };
-
-  services.syncthing = {
+  services.syncthing = { # syncthing: https://wiki.nixos.org/wiki/Syncthing
     enable = true;
     openDefaultPorts = true; # Open ports in the firewall for Syncthing. (NOTE: this will not open syncthing gui port)
   };
