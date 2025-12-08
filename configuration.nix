@@ -1,8 +1,8 @@
 { inputs, config, pkgs, ... }:
 
 {
-  imports = [ # Include the results of the hardware scan.
-    ./hardware-configuration.nix
+  imports = [ 
+    ./hardware-configuration.nix # Include the results of the hardware scan.
   ];
 
   # Bootloader.
@@ -70,6 +70,7 @@
     extensions = with pkgs.vscode-extensions; [ # Add desired extensions here
       bbenoist.nix # Example: Nix language support
       dbaeumer.vscode-eslint # Example: ESLint extension
+      redhat.vscode-yaml #so I can color peak at yaml files lol
     ];
   };
 
@@ -109,10 +110,7 @@
   # };
 
   #PERSONAL TWEAKS
-  fonts.packages = with pkgs; [ #fonts
-    nerd-fonts.fira-code
-    nerd-fonts.droid-sans-mono
-  ];
+
   # disable built in laptop keyboard (see libinput device-list)
   services.udev.extraRules = ''
     KERNEL=="event0", ATTRS{name}=="AT Translated Set 2 keyboard", ENV{LIBINPUT_IGNORE_DEVICE}="1"

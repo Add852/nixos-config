@@ -13,6 +13,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # stylix
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # noctalia shiz
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
@@ -20,14 +26,16 @@
     };
   };
 
-  outputs = inputs@{self, nixpkgs,home-manager,...}:{
+  outputs = inputs@{self, nixpkgs,home-manager, stylix, ...}:{
     nixosConfigurations = {
       nixos = nixpkgs.lib.nixosSystem{
         specialArgs = { inherit inputs; }; #used to pass hyprland vars in configuration.nix
         modules = [
           ./configuration.nix
+          ./stylix.nix
           ./users.nix
           ./noctalia.nix
+          stylix.nixosModules.stylix
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;

@@ -54,37 +54,37 @@
     hunspellDicts.uk_UA
     hunspellDicts.th_TH
   ];
-  
-  gtk = { #some code I found online lmao (fixed thunar and other GTK apps): https://discourse.nixos.org/t/nwg-look-installation-help/28978/2 
-      enable = true;
-      font.name = "TeX Gyre Adventor 10";
-      theme = {
-        name = "Juno";
-        package = pkgs.juno-theme;
-      };
-      iconTheme = {
-        name = "Papirus-Dark";
-        package = pkgs.papirus-icon-theme;
-      };
-      gtk3.extraConfig = {
-        Settings = ''
-          gtk-application-prefer-dark-theme=1
-        '';
-      };
-      gtk4.extraConfig = {
-        Settings = ''
-          gtk-application-prefer-dark-theme=1
-        '';
-      };
-  };
 
-  home.pointerCursor = {
-    name = "Bibata-Modern-Amber"; # Example theme (must be installed via nixpkgs/home-manager)
-    package = pkgs.bibata-cursors;
-    size = 16;
-    gtk.enable = true; # Helps with GTK apps consistency
-    x11.enable = true; # Helps with XWayland apps
-  };
+  # gtk = { #some code I found online lmao (fixed thunar and other GTK apps): https://discourse.nixos.org/t/nwg-look-installation-help/28978/2 
+  #     enable = false;
+  #     font.name = "TeX Gyre Adventor 10";
+  #     theme = {
+  #       name = "Juno";
+  #       package = pkgs.juno-theme;
+  #     };
+  #     iconTheme = {
+  #       name = "Papirus-Dark";
+  #       package = pkgs.papirus-icon-theme;
+  #     };
+  #     gtk3.extraConfig = {
+  #       Settings = ''
+  #         gtk-application-prefer-dark-theme=1
+  #       '';
+  #     };
+  #     gtk4.extraConfig = {
+  #       Settings = ''
+  #         gtk-application-prefer-dark-theme=1
+  #       '';
+  #     };
+  # };
+
+  # home.pointerCursor = {
+  #   name = "Bibata-Modern-Amber"; # Example theme (must be installed via nixpkgs/home-manager)
+  #   package = pkgs.bibata-cursors;
+  #   size = 16;
+  #   gtk.enable = true; # Helps with GTK apps consistency
+  #   x11.enable = true; # Helps with XWayland apps
+  # };
 
   # basic configuration of git, please change to your own
   programs.git = {
@@ -99,10 +99,6 @@
     settings = {
       general.import = [ "themes/noctalia.toml" ];
       env.TERM = "xterm-256color";
-      font = {
-        size = 12;
-        # draw_bold_text_with_bright_colors = true;
-      };
       scrolling.multiplier = 5;
       selection.save_to_clipboard = true;
     };
