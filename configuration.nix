@@ -36,6 +36,7 @@
   # List packages installed in system profile. To search, run:
   nixpkgs.config.allowUnfree = true; # Allow unfree packages (cursor and other proprietary drivers)
   environment.systemPackages = with pkgs; [
+    wtype #xdotool alternative [used for 3 swipe alt+key]
     file-roller #for archive manager
     ffmpegthumbnailer #video thumbnail preview for thunar/nemo
     webp-pixbuf-loader #webp thumbnail
