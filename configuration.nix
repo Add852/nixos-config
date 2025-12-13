@@ -11,10 +11,6 @@
 
   networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager.enable = true; # Enable networking
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   time.timeZone = "Asia/Manila"; # Set your time zone.
   i18n.defaultLocale = "en_PH.UTF-8"; # Select internationalisation properties.
@@ -40,20 +36,10 @@
   # List packages installed in system profile. To search, run:
   nixpkgs.config.allowUnfree = true; # Allow unfree packages (cursor and other proprietary drivers)
   environment.systemPackages = with pkgs; [
-    ffmpegthumbnailer #video thumbnail preview for thunar
-    kdePackages.qtmultimedia #just to get SDDM theme working :/
+    file-roller #for archive manager
+    ffmpegthumbnailer #video thumbnail preview for thunar/nemo
+    webp-pixbuf-loader #webp thumbnail
   ];
-
-  services.tumbler.enable = true; #enable image preview for thunar (unsure if needed)
-  services.gvfs.enable = true; #Enable gvfs for trash, mounting, and other functionalities
-  programs.thunar = { 
-    enable = true;
-    plugins = with pkgs.xfce; [
-      thunar-archive-plugin
-      thunar-volman
-    ];
-  };
-  
   programs.firefox = { # firefox w/ pwa pluhh
     enable = true;
     package = pkgs.firefox;
@@ -62,6 +48,9 @@
   services.syncthing = { # syncthing: https://wiki.nixos.org/wiki/Syncthing
     enable = true;
     openDefaultPorts = true; # Open ports in the firewall for Syncthing. (NOTE: this will not open syncthing gui port)
+    user = "tony";
+    dataDir = "/home/tony";
+    configDir = "/home/tony/.config/syncthing";
   };
   environment.variables.EDITOR = "code"; # set vscode as default text editor
   programs.vscode = {
@@ -73,14 +62,23 @@
       redhat.vscode-yaml #so I can color peak at yaml files lol
     ];
   };
+  programs.adb.enable = true; #for adb platform tool stuffs
+  users.users.tony = {
+    # pixel9a shizuku: adb shell /data/app/~~FgBzjAeLJkCex7tcP-F4hg==/moe.shizuku.privileged.api-ecslHhLn9OeJ5BHIszH7tw==/lib/arm64/libshizuku.so
+    extraGroups = ["adbusers"]; #for adb stuffs
+    shell = pkgs.bash;
+  };
+  programs.kdeconnect.enable = true;
 
   # DEVELOPER STUFFS
   services.openssh.enable = true;   # Enable the OpenSSH daemon.
   environment.sessionVariables.NIXOS_OZONE_WL = "1";   #to use VSCODE on wayland
-  networking.firewall = {   # Open ports in the firewall.
+  networking.firewall = rec {   # Open ports in the firewall.
     enable = true;
     allowedTCPPorts = [ 8080 8384 ]; #web_localhost, syncthing port
     # allowedUDPPorts = [ ... ];
+    allowedTCPPortRanges = [ { from = 1714; to = 1764; } ]; # kde connect ports
+    allowedUDPPortRanges = allowedTCPPortRanges; # copy above line
   };
 
   # HARDWARE and I/O STUFFS
@@ -97,17 +95,6 @@
     pulse.enable = true;
     # media-session.enable = true; # use the example session manager (no others are packaged yet so this is enabled by default, no need to redefine it in your config for now)
   };
-  # services.printing.enable = true;   # Enable CUPS to print documents.
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
 
   #PERSONAL TWEAKS
 

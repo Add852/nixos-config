@@ -26,7 +26,7 @@
     };
   };
 
-  outputs = inputs@{self, nixpkgs,home-manager, stylix, ...}:{
+  outputs = inputs@{self, nixpkgs, home-manager, stylix, ...}:{
     nixosConfigurations = {
       nixos = nixpkgs.lib.nixosSystem{
         specialArgs = { inherit inputs; }; #used to pass hyprland vars in configuration.nix
