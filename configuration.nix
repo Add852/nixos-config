@@ -36,6 +36,9 @@
   # List packages installed in system profile. To search, run:
   nixpkgs.config.allowUnfree = true; # Allow unfree packages (cursor and other proprietary drivers)
   environment.systemPackages = with pkgs; [
+    openssl_oqs #for openssl commands (generating )
+    ollama #for local llms
+    nodejs #for npm shiz
     wtype #xdotool alternative [used for 3 swipe alt+key]
     file-roller #for archive manager
     ffmpegthumbnailer #video thumbnail preview for thunar/nemo
@@ -56,11 +59,13 @@
   environment.variables.EDITOR = "code"; # set vscode as default text editor
   programs.vscode = {
     enable = true;
-    # package = pkgs.vscode.fhs; # Use the FHS-compliant VS Code package
+    package = pkgs.vscode.fhs; # Use the FHS-compliant VS Code package
     extensions = with pkgs.vscode-extensions; [ # Add desired extensions here
       bbenoist.nix # Example: Nix language support
       dbaeumer.vscode-eslint # Example: ESLint extension
       redhat.vscode-yaml #so I can color peak at yaml files lol
+      github.copilot #to allow github copilot
+      # expo.vscode-expo-tools #expo tools idk
     ];
   };
   programs.adb.enable = true; #for adb platform tool stuffs
@@ -76,11 +81,14 @@
   environment.sessionVariables.NIXOS_OZONE_WL = "1";   #to use VSCODE on wayland
   networking.firewall = rec {   # Open ports in the firewall.
     enable = true;
-    allowedTCPPorts = [ 8080 8384 ]; #web_localhost, syncthing port
+    allowedTCPPorts = [ 8080 8384 3000 8081 ]; #web_localhost, syncthing port, localhost:3000, react expo port
     # allowedUDPPorts = [ ... ];
     allowedTCPPortRanges = [ { from = 1714; to = 1764; } ]; # kde connect ports
     allowedUDPPortRanges = allowedTCPPortRanges; # copy above line
   };
+
+  services.gvfs.enable = true;
+  services.udisks2.enable = true;
 
   # HARDWARE and I/O STUFFS
   hardware.bluetooth.enable = true; #ForBluetooth

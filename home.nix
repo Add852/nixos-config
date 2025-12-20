@@ -20,6 +20,8 @@
     telegram-desktop
     discord
     youtube-music #electron yt music wrapper
+    ticktick #todo manager
+    gnome-text-editor #text editor / notepad
 
     #libre office suite
     libreoffice-qt
